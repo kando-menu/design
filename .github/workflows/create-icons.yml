@@ -1,0 +1,27 @@
+# SPDX-FileCopyrightText: Simon Schneegans <code@simonschneegans.de>
+# SPDX-License-Identifier: CC0-1.0
+
+name: Create Icons
+
+on: workflow_dispatch
+
+jobs:
+  create:
+    name: Create Icons
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Dependencies
+        run: |
+          brew install imagemagick
+          brew install svgo
+          brew tap homebrew/cask
+          brew install --cask inkscape
+          ln -s /Applications/Inkscape.app/Contents/MacOS/inkscape /usr/local/bin/inkscape
+      - name: Create Icons
+        run: ./icons/create.sh
+      - name: Upload Icons
+        uses: actions/upload-artifact@v4
+        with:
+          name: icons
+          path: icons/output
