@@ -98,7 +98,7 @@ add_margin_to_svg() {
     mv "$TMP_DIR/tmp.svg" "$svg"
 
     # Append the closing </g> tag before the final </svg> line using sed.
-    sed -e '$i </g>' "$svg" > "$TMP_DIR/tmp.svg"
+    sed -e '$i\'$'\n''</g>' "$svg" > "$TMP_DIR/tmp.svg"
     mv "$TMP_DIR/tmp.svg" "$svg"
 }
 
