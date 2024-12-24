@@ -123,16 +123,18 @@ composite_svgs() {
     local base_svg="$1"
     local overlay_svg="$2"
     local output_svg="$3"
-    local overlay_margin="$4"
+    local base_margin="$4"
+    local overlay_margin="$5"
 
-    if [[ -z "$base_svg" || -z "$overlay_svg" || -z "$overlay_margin" || -z "$output_svg" ]]; then
-        echo "Usage: composite_svgs <base_svg> <overlay_svg> <output_svg> <overlay_margin>"
+    if [[ -z "$base_svg" || -z "$overlay_svg" || -z "$base_margin" || -z "$overlay_margin" || -z "$output_svg" ]]; then
+        echo "Usage: composite_svgs <base_svg> <overlay_svg> <output_svg> <base_margin> <overlay_margin>"
         return 1
     fi
 
     cp "$base_svg" "$TMP_DIR/base.svg"
     cp "$overlay_svg" "$TMP_DIR/overlay.svg"
 
+    add_margin_to_svg "$TMP_DIR/base.svg" "$base_margin"
     add_margin_to_svg "$TMP_DIR/overlay.svg" "$overlay_margin"
 
     # Optimize the base and overlay SVGs.
@@ -149,15 +151,16 @@ composite_svgs_and_save_as_png() {
     local base_svg="$1"
     local overlay_svg="$2"
     local output_png="$3"
-    local overlay_margin="$4"
-    local size="$5"
+    local base_margin="$4"
+    local overlay_margin="$5"
+    local size="$6"
 
-    if [[ -z "$base_svg" || -z "$overlay_svg" || -z "$output_png" || -z "$overlay_margin" || -z "$size" ]]; then
-        echo "Usage: composite_svgs_and_save_as_png <base_svg> <overlay_svg> <output_png> <overlay_margin> <size>"
+    if [[ -z "$base_svg" || -z "$overlay_svg" || -z "$output_png" || -z "$base_margin" || -z "$overlay_margin" || -z "$size" ]]; then
+        echo "Usage: composite_svgs_and_save_as_png <base_svg> <overlay_svg> <output_png> <base_margin> <overlay_margin> <size>"
         return 1
     fi
 
-    composite_svgs "$base_svg" "$overlay_svg" "$TMP_DIR/tmp.svg" "$overlay_margin"
+    composite_svgs "$base_svg" "$overlay_svg" "$TMP_DIR/tmp.svg" "$base_margin" "$overlay_margin"
     convert_svg_to_png "$TMP_DIR/tmp.svg" "$output_png" "$size"
     rm "$TMP_DIR/tmp.svg"
 }
@@ -189,7 +192,7 @@ convert_svg_to_png "$TMP_DIR/blossom_tiny_dark.svg" "$OUTPUT_DIR/trayDark.png" 6
 rm "$TMP_DIR/blossom_tiny_dark.svg"
 
 # For the colored tray icon, we overlay the blossom_tiny.svg onto the bg_tiny_square.svg.
-composite_svgs source/bg_tiny_square.svg source/blossom_tiny.svg $TMP_DIR/trayColor.svg 24
+composite_svgs source/bg_tiny_square.svg source/blossom_tiny.svg $TMP_DIR/trayColor.svg 0 24
 convert_svg_to_png "$TMP_DIR/trayColor.svg" "$OUTPUT_DIR/trayColor.png" 64
 
 
@@ -198,7 +201,7 @@ convert_svg_to_png "$TMP_DIR/trayColor.svg" "$OUTPUT_DIR/trayColor.png" 64
 echo "Creating favicon..."
 
 # For the browser favicon, we overlay the blossom_small.svg onto the bg_tiny_square.svg.
-composite_svgs source/bg_tiny_square.svg source/blossom_small.svg $OUTPUT_DIR/favicon.svg 24
+composite_svgs source/bg_tiny_square.svg source/blossom_small.svg $OUTPUT_DIR/favicon.svg 0 24
 
 
 # --------------------------------------- Homepage Icon ------------------------------------------ #
@@ -206,7 +209,7 @@ composite_svgs source/bg_tiny_square.svg source/blossom_small.svg $OUTPUT_DIR/fa
 echo "Creating homepage icon..."
 
 # The homepage icon is an SVG made from blossom_medium.svg on top of bg_square.svg.
-composite_svgs source/bg_square.svg source/blossom_medium.svg $OUTPUT_DIR/web-icon.svg 32
+composite_svgs source/bg_square.svg source/blossom_medium.svg $OUTPUT_DIR/web-icon.svg 16 32
 
 
 # ---------------------------------------- Linux Icon -------------------------------------------- #
@@ -214,10 +217,10 @@ composite_svgs source/bg_square.svg source/blossom_medium.svg $OUTPUT_DIR/web-ic
 echo "Creating Linux icon..."
 
 # The Linux icon is an SVG made from blossom_medium.svg on top of bg_circle.svg.
-composite_svgs source/bg_circle.svg source/blossom_medium.svg $OUTPUT_DIR/icon.svg 32
+composite_svgs source/bg_circle.svg source/blossom_medium.svg $OUTPUT_DIR/icon.svg 0 32
 
 # We also need a png version of the icon.
-convert_svg_to_png "$OUTPUT_DIR/icon.svg" "$OUTPUT_DIR/icon.png" 512
+convert_svg_to_png "$OUTPUT_DIR/icon.svg" "$OUTPUT_DIR/icon.png" 0 512
 
 
 # ---------------------------------------- Windows Icon ------------------------------------------ #
@@ -229,12 +232,12 @@ WIN_TMP_DIR=$TMP_DIR/win
 mkdir -p $WIN_TMP_DIR
 
 # Create PNGs at different sizes.
-composite_svgs_and_save_as_png source/bg_circle.svg source/blossom_tiny.svg "$WIN_TMP_DIR/16.png" 32 16
-composite_svgs_and_save_as_png source/bg_circle.svg source/blossom_small.svg "$WIN_TMP_DIR/32.png" 32 32
-composite_svgs_and_save_as_png source/bg_circle.svg source/blossom_medium.svg "$WIN_TMP_DIR/48.png" 32 48
-composite_svgs_and_save_as_png source/bg_circle.svg source/blossom_medium.svg "$WIN_TMP_DIR/64.png" 32 64
-composite_svgs_and_save_as_png source/bg_circle.svg source/blossom_large.svg "$WIN_TMP_DIR/96.png" 32 96
-composite_svgs_and_save_as_png source/bg_circle.svg source/blossom_large.svg "$WIN_TMP_DIR/256.png" 32 256
+composite_svgs_and_save_as_png source/bg_circle.svg source/blossom_tiny.svg "$WIN_TMP_DIR/16.png"   0 32 16
+composite_svgs_and_save_as_png source/bg_circle.svg source/blossom_small.svg "$WIN_TMP_DIR/32.png"  0 32 32
+composite_svgs_and_save_as_png source/bg_circle.svg source/blossom_medium.svg "$WIN_TMP_DIR/48.png" 0 32 48
+composite_svgs_and_save_as_png source/bg_circle.svg source/blossom_medium.svg "$WIN_TMP_DIR/64.png" 0 32 64
+composite_svgs_and_save_as_png source/bg_circle.svg source/blossom_large.svg "$WIN_TMP_DIR/96.png"  0 32 96
+composite_svgs_and_save_as_png source/bg_circle.svg source/blossom_large.svg "$WIN_TMP_DIR/256.png" 0 32 256
 
 convert \
   "$WIN_TMP_DIR/16.png" \
@@ -255,16 +258,16 @@ MAC_TMP_DIR=$TMP_DIR/icon.iconset
 mkdir -p $MAC_TMP_DIR
 
 # Create PNGs at different sizes.
-composite_svgs_and_save_as_png source/bg_square.svg source/blossom_tiny.svg "$MAC_TMP_DIR/icon_16x16.png" 40 16
-composite_svgs_and_save_as_png source/bg_square.svg source/blossom_small.svg "$MAC_TMP_DIR/icon_16x16@2x.png" 36 32
-composite_svgs_and_save_as_png source/bg_square.svg source/blossom_small.svg "$MAC_TMP_DIR/icon_32x32.png" 36 32
-composite_svgs_and_save_as_png source/bg_square.svg source/blossom_medium.svg "$MAC_TMP_DIR/icon_32x32@2x.png" 32 64
-composite_svgs_and_save_as_png source/bg_square.svg source/blossom_medium.svg "$MAC_TMP_DIR/icon_128x128.png" 32 128
-composite_svgs_and_save_as_png source/bg_square.svg source/blossom_large.svg "$MAC_TMP_DIR/icon_128x128@2x.png" 32 256
-composite_svgs_and_save_as_png source/bg_square.svg source/blossom_large.svg "$MAC_TMP_DIR/icon_256x256.png" 32 256
-composite_svgs_and_save_as_png source/bg_square.svg source/blossom_large.svg "$MAC_TMP_DIR/icon_256x256@2x.png" 32 512
-composite_svgs_and_save_as_png source/bg_square.svg source/blossom_large.svg "$MAC_TMP_DIR/icon_512x512.png" 32 512
-composite_svgs_and_save_as_png source/bg_square.svg source/blossom_large.svg "$MAC_TMP_DIR/icon_512x512@2x.png" 32 1024
+composite_svgs_and_save_as_png source/bg_square.svg source/blossom_tiny.svg "$MAC_TMP_DIR/icon_16x16.png"       16 40 16
+composite_svgs_and_save_as_png source/bg_square.svg source/blossom_small.svg "$MAC_TMP_DIR/icon_16x16@2x.png"   16 36 32
+composite_svgs_and_save_as_png source/bg_square.svg source/blossom_small.svg "$MAC_TMP_DIR/icon_32x32.png"      16 36 32
+composite_svgs_and_save_as_png source/bg_square.svg source/blossom_medium.svg "$MAC_TMP_DIR/icon_32x32@2x.png"  24 40 64
+composite_svgs_and_save_as_png source/bg_square.svg source/blossom_medium.svg "$MAC_TMP_DIR/icon_128x128.png"   24 40 128
+composite_svgs_and_save_as_png source/bg_square.svg source/blossom_large.svg "$MAC_TMP_DIR/icon_128x128@2x.png" 24 40 256
+composite_svgs_and_save_as_png source/bg_square.svg source/blossom_large.svg "$MAC_TMP_DIR/icon_256x256.png"    24 40 256
+composite_svgs_and_save_as_png source/bg_square.svg source/blossom_large.svg "$MAC_TMP_DIR/icon_256x256@2x.png" 24 40 512
+composite_svgs_and_save_as_png source/bg_square.svg source/blossom_large.svg "$MAC_TMP_DIR/icon_512x512.png"    24 40 512
+composite_svgs_and_save_as_png source/bg_square.svg source/blossom_large.svg "$MAC_TMP_DIR/icon_512x512@2x.png" 24 40 1024
 
 # Create the icns file. If the iconutil command is not available, we print a warning and skip this step.
 if command -v iconutil >/dev/null 2>&1; then
@@ -279,7 +282,7 @@ fi
 echo "Creating social icon..."
 
 # The social icon is an SVG made from blossom_medium.svg on top of bg_full.svg.
-composite_svgs source/bg_full.svg source/blossom_medium.svg $OUTPUT_DIR/social.svg 32
+composite_svgs source/bg_full.svg source/blossom_medium.svg $OUTPUT_DIR/social.svg 0 32
 
 # We also need a png version of the icon.
 convert_svg_to_png "$OUTPUT_DIR/social.svg" "$OUTPUT_DIR/social.png" 512
