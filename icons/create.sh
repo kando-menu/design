@@ -93,10 +93,12 @@ add_margin_to_svg() {
     scale=$(echo "($size - 2 * $margin) / $size" | bc -l)
 
     # Insert a <g> after the <svg> line using sed.
-    sed -i='' "/^<svg.*/a <g transform=\"translate($margin, $margin) scale($scale) \">" "$svg"
+    sed -e "/^<svg.*/a <g transform=\"translate($margin, $margin) scale($scale) \">" "$svg" > "$TMP_DIR/tmp.svg"
+    mv "$TMP_DIR/tmp.svg" "$svg"
 
     # Append the closing </g> tag before the final </svg> line using sed.
-    sed -i='' '$i </g>' "$svg"
+    sed -e '$i </g>' "$svg" > "$TMP_DIR/tmp.svg"
+    mv "$TMP_DIR/tmp.svg" "$svg"
 }
 
 # Converts an SVG to a PNG of the specified size.
