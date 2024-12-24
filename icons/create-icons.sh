@@ -178,15 +178,15 @@ rm "$TMP_DIR/blossom_tiny_black.svg"
 
 # Then we need a light version of the tray icon and a dark version. The light version is simply
 # blossom_tiny.svg, for the dark version we replace #f0cece with #24272f.
-convert_svg_to_png source/blossom_tiny.svg "$OUTPUT_DIR/tray-light.png" 64
+convert_svg_to_png source/blossom_tiny.svg "$OUTPUT_DIR/trayLight.png" 64
 ICON=$(cat source/blossom_tiny.svg | sed 's/#f0cece/#24272f/g')
 echo "$ICON" > "$TMP_DIR/blossom_tiny_dark.svg"
-convert_svg_to_png "$TMP_DIR/blossom_tiny_dark.svg" "$OUTPUT_DIR/tray-dark.png" 64
+convert_svg_to_png "$TMP_DIR/blossom_tiny_dark.svg" "$OUTPUT_DIR/trayDark.png" 64
 rm "$TMP_DIR/blossom_tiny_dark.svg"
 
 # For the colored tray icon, we overlay the blossom_tiny.svg onto the bg_tiny_square.svg.
-composite_svgs source/bg_tiny_square.svg source/blossom_tiny.svg $TMP_DIR/tray-colored.svg 24
-convert_svg_to_png "$TMP_DIR/tray-colored.svg" "$OUTPUT_DIR/tray-colored.png" 64
+composite_svgs source/bg_tiny_square.svg source/blossom_tiny.svg $TMP_DIR/trayColored.svg 24
+convert_svg_to_png "$TMP_DIR/trayColored.svg" "$OUTPUT_DIR/trayColored.png" 64
 
 
 # ------------------------------------------ Favicon --------------------------------------------- #
