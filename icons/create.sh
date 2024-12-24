@@ -260,7 +260,7 @@ composite_svgs_and_save_as_png source/bg_square.svg source/blossom_large.svg "$M
 
 # Create the icns file. If the iconutil command is not available, we print a warning and skip this step.
 if command -v iconutil >/dev/null 2>&1; then
-    iconutil -c icns "$MAC_TMP_DIR"
+    iconutil -c icns -o "$OUTPUT_DIR/icon.icns" "$MAC_TMP_DIR"
 else
     echo "Warning: iconutil is not available. Skipping creation of macOS icon."
 fi
