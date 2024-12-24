@@ -89,13 +89,14 @@ add_margin_to_svg() {
     optimize_svg "$svg"
 
     local size=256
-    local scale=$(echo "($size - 2 * $margin) / $size" | bc -l)
+    local scale
+    scale=$(echo "($size - 2 * $margin) / $size" | bc -l)
 
     # Insert a <g> after the <svg> line using sed.
-    sed -i "/^<svg.*/a <g transform=\"translate($margin, $margin) scale($scale) \">" "$svg"
+    sed -i='' "/^<svg.*/a <g transform=\"translate($margin, $margin) scale($scale) \">" "$svg"
 
     # Append the closing </g> tag before the final </svg> line using sed.
-    sed -i '$i </g>' "$svg"
+    sed -i='' '$i </g>' "$svg"
 }
 
 # Converts an SVG to a PNG of the specified size.
@@ -168,7 +169,7 @@ echo "Creating tray icons..."
 
 # We start by loading source/blossom_tiny.svg and replace the #f0cece color with black. We store
 # the result in $TMP_DIR/blossom_tiny_black.svg.
-ICON=$(cat source/blossom_tiny.svg | sed 's/#f0cece/#000000/g')
+ICON=$(sed 's/#f0cece/#000000/g' < source/blossom_tiny.svg)
 echo "$ICON" > "$TMP_DIR/blossom_tiny_black.svg"
 
 convert_svg_to_png "$TMP_DIR/blossom_tiny_black.svg" "$OUTPUT_DIR/trayTemplate.png" 16
@@ -179,7 +180,7 @@ rm "$TMP_DIR/blossom_tiny_black.svg"
 # Then we need a light version of the tray icon and a dark version. The light version is simply
 # blossom_tiny.svg, for the dark version we replace #f0cece with #24272f.
 convert_svg_to_png source/blossom_tiny.svg "$OUTPUT_DIR/trayLight.png" 64
-ICON=$(cat source/blossom_tiny.svg | sed 's/#f0cece/#24272f/g')
+ICON=$(sed 's/#f0cece/#24272f/g' < source/blossom_tiny.svg)
 echo "$ICON" > "$TMP_DIR/blossom_tiny_dark.svg"
 convert_svg_to_png "$TMP_DIR/blossom_tiny_dark.svg" "$OUTPUT_DIR/trayDark.png" 64
 rm "$TMP_DIR/blossom_tiny_dark.svg"
