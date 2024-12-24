@@ -3,6 +3,20 @@
 # SPDX-FileCopyrightText: Simon Schneegans <code@simonschneegans.de>
 # SPDX-License-Identifier: MIT
 
+# ------------------------------------------------------------------------------------------------ #
+# This script creates various icons for Kando. For this it overlays different blossom variants on  #
+# top of different background images. The resulting icons are saved in the output directory.       #
+#                                                                                                  #
+# Layering SVGs ontop of each other is surprisingly difficult. The main problem is that the SVG    #
+# files contain IDs for each element. If we simply overlay two SVGs, the IDs will clash. To solve  #
+# this problem, we use the svgo tool to prefix all IDs with a unique string. Also, the overlayed   #
+# SVGs need to be scaled and translated to fit the background. This is done by adding a <g>        #
+# element to the root of the SVG.                                                                  #
+#                                                                                                  #
+# You will need to have svgo, inkscape, and convert from ImageMagick installed. To create the      #
+# macOS icon, you will need to run this script on a macOS machine.                                 #
+# ------------------------------------------------------------------------------------------------ #
+
 # Exit on error.
 set -e
 
@@ -17,13 +31,15 @@ mkdir -p $TMP_DIR
 OUTPUT_DIR=output
 mkdir -p $OUTPUT_DIR
 
-# Ensure dependencies exist
+# Ensure dependencies exist.
 command -v svgo >/dev/null 2>&1 || { echo "Error: svgo is required but not installed."; return 1; }
 command -v inkscape >/dev/null 2>&1 || { echo "Error: inkscape is required but not installed."; return 1; }
 command -v convert >/dev/null 2>&1 || { echo "Error: convert from image magick is required but not installed."; return 1; }
 
 # ------------------------------------------ Functions ------------------------------------------- #
 
+# Optimize an SVG file using svgo. It prefixes all IDs with a unique string. It also ensures that
+# every tag is on a new line.
 optimize_svg() {
     local svg="$1"
 
@@ -58,6 +74,8 @@ EOL
     rm "$TMP_DIR/svgo.config.js"
 }
 
+# Adds a margin to an SVG file. This is done by adding a <g> element to the root of the SVG and
+# scaling and translating the content. This function assumes that the SVG file has a size of 256x256.
 add_margin_to_svg() {
     local svg="$1"
     local margin="$2"
@@ -94,7 +112,9 @@ convert_svg_to_png() {
     inkscape -w "$size" -h "$size" "$input_svg" -o "$output_png"
 }
 
-# Function to composite two SVGs into a single SVG.
+# Function to composite two SVGs into a single SVG. The first SVG is used as the base, the second
+# SVG is overlayed on top of it. Both SVGs must have a size of 256x256 pixels. You can specify a
+# margin for the overlay SVG. This is given in pixels.
 composite_svgs() {
     local base_svg="$1"
     local overlay_svg="$2"
@@ -120,6 +140,7 @@ composite_svgs() {
     grep --invert-match "<svg" "$TMP_DIR/overlay.svg" >> "$output_svg"
 }
 
+# Same as composite_svgs, but also converts the result to a PNG of the specified size.
 composite_svgs_and_save_as_png() {
     local base_svg="$1"
     local overlay_svg="$2"
