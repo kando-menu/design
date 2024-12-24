@@ -189,8 +189,8 @@ convert_svg_to_png "$TMP_DIR/blossom_tiny_dark.svg" "$OUTPUT_DIR/trayDark.png" 6
 rm "$TMP_DIR/blossom_tiny_dark.svg"
 
 # For the colored tray icon, we overlay the blossom_tiny.svg onto the bg_tiny_square.svg.
-composite_svgs source/bg_tiny_square.svg source/blossom_tiny.svg $TMP_DIR/trayColored.svg 24
-convert_svg_to_png "$TMP_DIR/trayColored.svg" "$OUTPUT_DIR/trayColored.png" 64
+composite_svgs source/bg_tiny_square.svg source/blossom_tiny.svg $TMP_DIR/trayColor.svg 24
+convert_svg_to_png "$TMP_DIR/trayColor.svg" "$OUTPUT_DIR/trayColor.png" 64
 
 
 # ------------------------------------------ Favicon --------------------------------------------- #
@@ -199,6 +199,14 @@ echo "Creating favicon..."
 
 # For the browser favicon, we overlay the blossom_small.svg onto the bg_tiny_square.svg.
 composite_svgs source/bg_tiny_square.svg source/blossom_small.svg $OUTPUT_DIR/favicon.svg 24
+
+
+# --------------------------------------- Homepage Icon ------------------------------------------ #
+
+echo "Creating homepage icon..."
+
+# The homepage icon is an SVG made from blossom_medium.svg on top of bg_square.svg.
+composite_svgs source/bg_square.svg source/blossom_medium.svg $OUTPUT_DIR/web-icon.svg 32
 
 
 # ---------------------------------------- Linux Icon -------------------------------------------- #
