@@ -217,7 +217,7 @@ composite_svgs source/bg_square.svg source/blossom_medium.svg $OUTPUT_DIR/web-ic
 echo "Creating Linux icon..."
 
 # The Linux icon is an SVG made from blossom_medium.svg on top of bg_circle.svg.
-composite_svgs source/bg_circle.svg source/blossom_medium.svg $OUTPUT_DIR/icon.svg 0 32
+composite_svgs source/bg_circle_linux.svg source/blossom_medium.svg $OUTPUT_DIR/icon.svg 0 32
 
 # We also need a png version of the icon.
 convert_svg_to_png "$OUTPUT_DIR/icon.svg" "$OUTPUT_DIR/icon.png" 0 512
@@ -232,12 +232,13 @@ WIN_TMP_DIR=$TMP_DIR/win
 mkdir -p $WIN_TMP_DIR
 
 # Create PNGs at different sizes.
-composite_svgs_and_save_as_png source/bg_circle.svg source/blossom_tiny.svg "$WIN_TMP_DIR/16.png"   0 32 16
-composite_svgs_and_save_as_png source/bg_circle.svg source/blossom_small.svg "$WIN_TMP_DIR/32.png"  0 32 32
-composite_svgs_and_save_as_png source/bg_circle.svg source/blossom_medium.svg "$WIN_TMP_DIR/48.png" 0 32 48
-composite_svgs_and_save_as_png source/bg_circle.svg source/blossom_medium.svg "$WIN_TMP_DIR/64.png" 0 32 64
-composite_svgs_and_save_as_png source/bg_circle.svg source/blossom_large.svg "$WIN_TMP_DIR/96.png"  0 32 96
-composite_svgs_and_save_as_png source/bg_circle.svg source/blossom_large.svg "$WIN_TMP_DIR/256.png" 0 32 256
+composite_svgs_and_save_as_png source/bg_circle_windows.svg source/blossom_tiny.svg "$WIN_TMP_DIR/16.png"   0 17 16
+composite_svgs_and_save_as_png source/bg_circle_windows.svg source/blossom_small.svg "$WIN_TMP_DIR/32.png"  0 17 32
+composite_svgs_and_save_as_png source/bg_circle_windows.svg source/blossom_medium.svg "$WIN_TMP_DIR/48.png" 0 17 48
+composite_svgs_and_save_as_png source/bg_circle_windows.svg source/blossom_medium.svg "$WIN_TMP_DIR/64.png" 0 17 64
+composite_svgs_and_save_as_png source/bg_circle_windows.svg source/blossom_large.svg "$WIN_TMP_DIR/96.png"  0 17 96
+composite_svgs_and_save_as_png source/bg_circle_windows.svg source/blossom_large.svg "$WIN_TMP_DIR/128.png"  0 17 128
+composite_svgs_and_save_as_png source/bg_circle_windows.svg source/blossom_large.svg "$WIN_TMP_DIR/256.png" 0 17 256
 
 convert \
   "$WIN_TMP_DIR/16.png" \
@@ -245,6 +246,7 @@ convert \
   "$WIN_TMP_DIR/48.png" \
   "$WIN_TMP_DIR/64.png" \
   "$WIN_TMP_DIR/96.png" \
+  "$WIN_TMP_DIR/128.png \
   "$WIN_TMP_DIR/256.png" \
   "$OUTPUT_DIR/icon.ico"
 
@@ -259,15 +261,15 @@ mkdir -p $MAC_TMP_DIR
 
 # Create PNGs at different sizes.
 composite_svgs_and_save_as_png source/bg_square.svg source/blossom_tiny.svg "$MAC_TMP_DIR/icon_16x16.png"       16 40 16
-composite_svgs_and_save_as_png source/bg_square.svg source/blossom_small.svg "$MAC_TMP_DIR/icon_16x16@2x.png"   16 36 32
+composite_svgs_and_save_as_png source/bg_square@2x.svg source/blossom_small.svg "$MAC_TMP_DIR/icon_16x16@2x.png"   16 36 32
 composite_svgs_and_save_as_png source/bg_square.svg source/blossom_small.svg "$MAC_TMP_DIR/icon_32x32.png"      16 36 32
-composite_svgs_and_save_as_png source/bg_square.svg source/blossom_medium.svg "$MAC_TMP_DIR/icon_32x32@2x.png"  24 40 64
+composite_svgs_and_save_as_png source/bg_square@2x.svg source/blossom_medium.svg "$MAC_TMP_DIR/icon_32x32@2x.png"  24 40 64
 composite_svgs_and_save_as_png source/bg_square.svg source/blossom_medium.svg "$MAC_TMP_DIR/icon_128x128.png"   24 40 128
-composite_svgs_and_save_as_png source/bg_square.svg source/blossom_large.svg "$MAC_TMP_DIR/icon_128x128@2x.png" 24 40 256
+composite_svgs_and_save_as_png source/bg_square@2x.svg source/blossom_large.svg "$MAC_TMP_DIR/icon_128x128@2x.png" 24 40 256
 composite_svgs_and_save_as_png source/bg_square.svg source/blossom_large.svg "$MAC_TMP_DIR/icon_256x256.png"    24 40 256
-composite_svgs_and_save_as_png source/bg_square.svg source/blossom_large.svg "$MAC_TMP_DIR/icon_256x256@2x.png" 24 40 512
+composite_svgs_and_save_as_png source/bg_square@2x.svg source/blossom_large.svg "$MAC_TMP_DIR/icon_256x256@2x.png" 24 40 512
 composite_svgs_and_save_as_png source/bg_square.svg source/blossom_large.svg "$MAC_TMP_DIR/icon_512x512.png"    24 40 512
-composite_svgs_and_save_as_png source/bg_square.svg source/blossom_large.svg "$MAC_TMP_DIR/icon_512x512@2x.png" 24 40 1024
+composite_svgs_and_save_as_png source/bg_square@2x.svg source/blossom_large.svg "$MAC_TMP_DIR/icon_512x512@2x.png" 24 40 1024
 
 # Create the icns file. If the iconutil command is not available, we print a warning and skip this step.
 if command -v iconutil >/dev/null 2>&1; then
