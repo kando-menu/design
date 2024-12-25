@@ -2,20 +2,20 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   width="256"
-   height="256"
-   viewBox="0 0 256 256"
-   version="1.1"
-   id="svg1"
-   inkscape:version="1.4 (e7c3feb100, 2024-10-09)"
-   sodipodi:docname="bg_circle.svg"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg">
-  <sodipodi:namedview
-     id="namedview1"
+    width="256"
+    height="256"
+    version="1.1"
+    viewBox="0 0 256 256"
+    xml:space="preserve"
+    id="svg2"
+    sodipodi:docname="bg_circle.svg"
+    inkscape:version="1.4 (e7c3feb100, 2024-10-09)"
+    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns="http://www.w3.org/2000/svg"
+    xmlns:svg="http://www.w3.org/2000/svg"><sodipodi:namedview
+     id="namedview2"
      pagecolor="#ffffff"
      bordercolor="#000000"
      borderopacity="0.25"
@@ -23,116 +23,43 @@
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
-     inkscape:document-units="px"
-     inkscape:zoom="2.8643349"
-     inkscape:cx="185.20879"
-     inkscape:cy="158.85014"
+     inkscape:zoom="3.59375"
+     inkscape:cx="127.86087"
+     inkscape:cy="128"
      inkscape:window-width="1920"
      inkscape:window-height="1131"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer1"
-     showgrid="true"
-     showguides="false">
-    <inkscape:grid
-       id="grid4"
-       units="px"
-       originx="0"
-       originy="0"
-       spacingx="4"
-       spacingy="4"
-       empcolor="#0099e5"
-       empopacity="0.30196078"
-       color="#0099e5"
-       opacity="0.14901961"
-       empspacing="4"
-       enabled="true"
-       visible="true" />
-    <sodipodi:guide
-       position="6.35,6.35"
-       orientation="-0.70710678,0.70710678"
-       id="guide1"
-       inkscape:locked="false"
-       inkscape:label=""
-       inkscape:color="rgb(0,134,229)" />
-    <sodipodi:guide
-       position="6.35,6.35"
-       orientation="0.4539905,0.89100652"
-       id="guide2"
-       inkscape:label=""
-       inkscape:locked="false"
-       inkscape:color="rgb(0,134,229)" />
-    <sodipodi:guide
-       position="6.35,6.35"
-       orientation="0.98768834,-0.15643447"
-       id="guide3"
-       inkscape:label=""
-       inkscape:locked="false"
-       inkscape:color="rgb(0,134,229)" />
-    <sodipodi:guide
-       position="6.35,6.35"
-       orientation="0.15643447,-0.98768834"
-       id="guide4"
-       inkscape:label=""
-       inkscape:locked="false"
-       inkscape:color="rgb(0,134,229)" />
-    <sodipodi:guide
-       position="6.35,6.35"
-       orientation="-0.89100652,-0.4539905"
-       id="guide5"
-       inkscape:label=""
-       inkscape:locked="false"
-       inkscape:color="rgb(0,134,229)" />
-  </sodipodi:namedview>
-  <defs
-     id="defs1">
-    <linearGradient
-       inkscape:collect="always"
-       id="linearGradient33451">
-      <stop
-         style="stop-color:#a53d6b;stop-opacity:1;"
+     inkscape:current-layer="svg2" /><defs
+     id="defs2"><linearGradient
+       id="linearGradient135"
+       x1="48.338"
+       x2="78.104"
+       y1="13.229"
+       y2="122.24"
+       gradientTransform="matrix(2.3484 0 0 2.3484 -31.068 -31.068)"
+       gradientUnits="userSpaceOnUse"><stop
+         stop-color="#a53d6b"
          offset="0"
-         id="stop33447" />
-      <stop
-         style="stop-color:#652945;stop-opacity:1;"
+         id="stop1" /><stop
+         stop-color="#652945"
          offset="1"
-         id="stop33449" />
-    </linearGradient>
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient33451"
-       id="linearGradient549"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(2.0548896,0,0,2.0548893,-11.184406,-11.184437)"
-       x1="48.337929"
-       y1="13.229165"
-       x2="78.103554"
-       y2="122.2375" />
-  </defs>
-  <g
-     inkscape:label="Layer 1"
-     inkscape:groupmode="layer"
-     id="layer1">
-    <circle
-       style="font-variation-settings:normal;display:inline;opacity:1;vector-effect:none;fill:#3e192a;fill-opacity:1;stroke-width:0.483646;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.289854;-inkscape-stroke:none;paint-order:stroke fill markers;stop-color:#000000;stop-opacity:1"
-       id="ellipse35"
-       cx="128"
-       cy="132"
-       inkscape:label="path9"
-       inkscape:export-filename="/home/simon/circle138.png"
-       inkscape:export-xdpi="200"
-       inkscape:export-ydpi="200"
-       r="112" />
-    <circle
-       style="font-variation-settings:normal;display:inline;vector-effect:none;fill:url(#linearGradient549);fill-opacity:1;stroke-width:0.489971;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.289854;-inkscape-stroke:none;paint-order:stroke fill markers;stop-color:#000000"
-       id="circle423"
+         id="stop2" /></linearGradient></defs><g
+     stroke-linecap="square"
+     stroke-opacity=".28985"
+     stroke-width=".55997"
+     id="g2"><ellipse
        cx="128"
        cy="128"
-       inkscape:label="path9"
-       inkscape:export-filename="/home/simon/circle138.png"
-       inkscape:export-xdpi="200"
-       inkscape:export-ydpi="200"
-       r="112" />
-  </g>
-</svg>
+       rx="128"
+       ry="128"
+       fill="url(#linearGradient135)"
+       stop-color="#000000"
+       style="-inkscape-stroke:none;font-variation-settings:normal;paint-order:stroke fill markers"
+       id="ellipse2" /><path
+       d="m0.037107 125.24-0.037109 2.7617c2.4743e-7 45.73 24.397 87.985 64 110.85 39.569 22.845 88.45 22.835 128 0 39.603-22.865 64-65.12 64-110.85l-0.0371-2.7617c0 70.933-57.46 126.74-127.96 126.76-70.503-0.01971-127.96-55.828-127.96-126.76z"
+       opacity=".397"
+       stop-color="#000000"
+       style="paint-order:stroke fill markers"
+       id="path2" /></g></svg>
