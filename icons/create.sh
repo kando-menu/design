@@ -200,6 +200,17 @@ rm "$TMP_DIR/blossom_tiny_dark.svg"
 composite_svgs source/bg_tiny_square.svg source/blossom_tiny.svg $TMP_DIR/trayColor.svg 0 24
 convert_svg_to_png "$TMP_DIR/trayColor.svg" "$OUTPUT_DIR/trayColor.png" 64
 
+# Pure black icon
+ICON=$(sed 's/#f0cece/#000000/g' < source/blossom_tiny.svg)
+echo "$ICON" > "$TMP_DIR/blossom_tiny_pure_black.svg"
+convert_svg_to_png "$TMP_DIR/blossom_tiny_pure_black.svg" "$OUTPUT_DIR/trayBlack.png" 64
+rm "$TMP_DIR/blossom_tiny_pure_black.svg"
+
+# Pure white icon
+ICON=$(sed 's/#f0cece/#FFFFFF/g' < source/blossom_tiny.svg)
+echo "$ICON" > "$TMP_DIR/blossom_tiny_pure_white.svg"
+convert_svg_to_png "$TMP_DIR/blossom_tiny_pure_white.svg" "$OUTPUT_DIR/trayWhite.png" 64
+rm "$TMP_DIR/blossom_tiny_pure_white.svg"
 
 # ------------------------------------------ Favicon --------------------------------------------- #
 
