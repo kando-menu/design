@@ -79,6 +79,33 @@ EOL
     rm "$TMP_DIR/svgo.config.js"
 }
 
+# Scales a given SVG file to 256x256. This is done by adding a <g> element to the root of the
+# SVG and scaling and translating the content.
+normalize_size() {
+    local svg="$1"
+
+    if [[ -z "$svg" ]]; then
+        echo "Usage: normalize_size <svg>"
+        return 1
+    fi
+
+    # This ensures that every tag is on a new line.
+    optimize_svg "$svg"
+
+    local size=$(inkscape --query-width "$svg")
+    local scale
+    scale=$(echo "256 / $size" | bc -l)
+
+    # Insert a <g> after the <svg> line using sed.
+    sed -e "/^<svg.*/a\\
+        <g transform=\"translate(0, 0) scale($scale) \">" "$svg" > "$TMP_DIR/tmp.svg"
+    mv "$TMP_DIR/tmp.svg" "$svg"
+
+    # Append the closing </g> tag before the final </svg> line using sed.
+    sed -e '$i\'$'\n''</g>' "$svg" > "$TMP_DIR/tmp.svg"
+    mv "$TMP_DIR/tmp.svg" "$svg"
+}
+
 # Adds a margin to an SVG file. This is done by adding a <g> element to the root of the SVG and
 # scaling and translating the content. This function assumes that the SVG file has a size of 256x256.
 add_margin_to_svg() {
@@ -139,6 +166,10 @@ composite_svgs() {
     cp "$base_svg" "$TMP_DIR/base.svg"
     cp "$overlay_svg" "$TMP_DIR/overlay.svg"
 
+    # Normalize the size of the base and overlay SVGs.
+    normalize_size "$TMP_DIR/base.svg"
+    normalize_size "$TMP_DIR/overlay.svg"
+
     add_margin_to_svg "$TMP_DIR/base.svg" "$base_margin"
     add_margin_to_svg "$TMP_DIR/overlay.svg" "$overlay_margin"
 
@@ -170,55 +201,53 @@ composite_svgs_and_save_as_png() {
     rm "$TMP_DIR/tmp.svg"
 }
 
+# ----------------------------- Temporary Recolored Tiny and Small Icons ------------------------- # 
+
+# We will use these icons multiple times, so we create temporary versions of them.
+
+ICON=$(sed 's/path/path fill="#ffffff"/g' < source/blossom_tiny.svg)
+echo "$ICON" > "$TMP_DIR/blossom_tiny_white.svg"
+ICON=$(sed 's/path/path fill="#f0cece"/g' < source/blossom_tiny.svg)
+echo "$ICON" > "$TMP_DIR/blossom_tiny_light.svg"
+ICON=$(sed 's/path/path fill="#24272f"/g' < source/blossom_tiny.svg)
+echo "$ICON" > "$TMP_DIR/blossom_tiny_dark.svg"
+ICON=$(sed 's/path/path fill="#000000"/g' < source/blossom_tiny.svg)
+echo "$ICON" > "$TMP_DIR/blossom_tiny_black.svg"
+
+ICON=$(sed 's/path/path fill="#ffffff"/g' < source/blossom_small.svg)
+echo "$ICON" > "$TMP_DIR/blossom_small_white.svg"
+ICON=$(sed 's/path/path fill="#f0cece"/g' < source/blossom_small.svg)
+echo "$ICON" > "$TMP_DIR/blossom_small_light.svg"
+ICON=$(sed 's/path/path fill="#24272f"/g' < source/blossom_small.svg)
+echo "$ICON" > "$TMP_DIR/blossom_small_dark.svg"
+ICON=$(sed 's/path/path fill="#000000"/g' < source/blossom_small.svg)
+echo "$ICON" > "$TMP_DIR/blossom_small_black.svg"
 
 # ------------------------------------------ Tray Icons ------------------------------------------ #
 
 echo "Creating tray icons..."
 
 # First, we create the tray icons for macOS. This requires three sizes: 16x16, 32x32, and 64x64.
-# All icons need to be black as they will be recolored by the system.
+convert_svg_to_png "source/blossom_tiny.svg" "$OUTPUT_DIR/trayTemplate.png"    16
+convert_svg_to_png "source/blossom_tiny.svg" "$OUTPUT_DIR/trayTemplate@2x.png" 32
+convert_svg_to_png "source/blossom_tiny.svg" "$OUTPUT_DIR/trayTemplate@4x.png" 64
 
-# We start by loading source/blossom_tiny.svg and replace the #f0cece color with black. We store
-# the result in $TMP_DIR/blossom_tiny_black.svg.
-ICON=$(sed 's/#f0cece/#000000/g' < source/blossom_tiny.svg)
-echo "$ICON" > "$TMP_DIR/blossom_tiny_black.svg"
+# Then we need four versions of the tray icon.
+convert_svg_to_png "$TMP_DIR/blossom_tiny_white.svg" "$OUTPUT_DIR/trayWhite.png" 64
+convert_svg_to_png "$TMP_DIR/blossom_tiny_light.svg" "$OUTPUT_DIR/trayLight.png" 64
+convert_svg_to_png "$TMP_DIR/blossom_tiny_dark.svg"  "$OUTPUT_DIR/trayDark.png"  64
+convert_svg_to_png "$TMP_DIR/blossom_tiny_black.svg" "$OUTPUT_DIR/trayBlack.png" 64
 
-convert_svg_to_png "$TMP_DIR/blossom_tiny_black.svg" "$OUTPUT_DIR/trayTemplate.png" 16
-convert_svg_to_png "$TMP_DIR/blossom_tiny_black.svg" "$OUTPUT_DIR/trayTemplate@2x.png" 32
-convert_svg_to_png "$TMP_DIR/blossom_tiny_black.svg" "$OUTPUT_DIR/trayTemplate@4x.png" 64
-rm "$TMP_DIR/blossom_tiny_black.svg"
-
-# Then we need a light version of the tray icon and a dark version. The light version is simply
-# blossom_tiny.svg, for the dark version we replace #f0cece with #24272f.
-convert_svg_to_png source/blossom_tiny.svg "$OUTPUT_DIR/trayLight.png" 64
-ICON=$(sed 's/#f0cece/#24272f/g' < source/blossom_tiny.svg)
-echo "$ICON" > "$TMP_DIR/blossom_tiny_dark.svg"
-convert_svg_to_png "$TMP_DIR/blossom_tiny_dark.svg" "$OUTPUT_DIR/trayDark.png" 64
-rm "$TMP_DIR/blossom_tiny_dark.svg"
-
-# For the colored tray icon, we overlay the blossom_tiny.svg onto the bg_tiny_square.svg.
-composite_svgs source/bg_tiny_square.svg source/blossom_tiny.svg $TMP_DIR/trayColor.svg 0 24
+# For the colored tray icon, we overlay the light variant onto bg_tiny_square.svg.
+composite_svgs source/bg_tiny_square.svg $TMP_DIR/blossom_tiny_light.svg $TMP_DIR/trayColor.svg 0 24
 convert_svg_to_png "$TMP_DIR/trayColor.svg" "$OUTPUT_DIR/trayColor.png" 64
-
-# Pure black icon
-ICON=$(sed 's/#f0cece/#000000/g' < source/blossom_tiny.svg)
-echo "$ICON" > "$TMP_DIR/blossom_tiny_pure_black.svg"
-convert_svg_to_png "$TMP_DIR/blossom_tiny_pure_black.svg" "$OUTPUT_DIR/trayBlack.png" 64
-rm "$TMP_DIR/blossom_tiny_pure_black.svg"
-
-# Pure white icon
-ICON=$(sed 's/#f0cece/#FFFFFF/g' < source/blossom_tiny.svg)
-echo "$ICON" > "$TMP_DIR/blossom_tiny_pure_white.svg"
-convert_svg_to_png "$TMP_DIR/blossom_tiny_pure_white.svg" "$OUTPUT_DIR/trayWhite.png" 64
-rm "$TMP_DIR/blossom_tiny_pure_white.svg"
 
 # ------------------------------------------ Favicon --------------------------------------------- #
 
 echo "Creating favicon..."
 
-# For the browser favicon, we overlay the blossom_small.svg onto the bg_tiny_square.svg.
-composite_svgs source/bg_tiny_square.svg source/blossom_small.svg $OUTPUT_DIR/favicon.svg 0 24
-
+# For the browser favicon, we overlay the light small variant onto bg_tiny_square.svg.
+composite_svgs source/bg_tiny_square.svg $TMP_DIR/blossom_small_light.svg $OUTPUT_DIR/favicon.svg 0 24
 
 # --------------------------------------- Homepage Icon ------------------------------------------ #
 
@@ -248,8 +277,8 @@ WIN_TMP_DIR=$TMP_DIR/win
 mkdir -p $WIN_TMP_DIR
 
 # Create PNGs at different sizes.
-composite_svgs_and_save_as_png source/bg_circle.svg source/blossom_tiny.svg "$WIN_TMP_DIR/16.png"   0 20 16
-composite_svgs_and_save_as_png source/bg_circle.svg source/blossom_small.svg "$WIN_TMP_DIR/32.png"  0 20 32
+composite_svgs_and_save_as_png source/bg_circle.svg $TMP_DIR/blossom_tiny_light.svg "$WIN_TMP_DIR/16.png"  0 20 16
+composite_svgs_and_save_as_png source/bg_circle.svg $TMP_DIR/blossom_small_light.svg "$WIN_TMP_DIR/32.png" 0 20 32
 composite_svgs_and_save_as_png source/bg_circle.svg source/blossom_medium.svg "$WIN_TMP_DIR/48.png" 0 20 48
 composite_svgs_and_save_as_png source/bg_circle.svg source/blossom_medium.svg "$WIN_TMP_DIR/64.png" 0 20 64
 composite_svgs_and_save_as_png source/bg_circle.svg source/blossom_large.svg "$WIN_TMP_DIR/96.png"  0 19 96
@@ -276,9 +305,9 @@ MAC_TMP_DIR=$TMP_DIR/icon.iconset
 mkdir -p $MAC_TMP_DIR
 
 # Create PNGs at different sizes.
-composite_svgs_and_save_as_png source/bg_square.svg source/blossom_tiny.svg "$MAC_TMP_DIR/icon_16x16.png"       16 40 16
-composite_svgs_and_save_as_png source/bg_square.svg source/blossom_small.svg "$MAC_TMP_DIR/icon_16x16@2x.png"   16 36 32
-composite_svgs_and_save_as_png source/bg_square.svg source/blossom_small.svg "$MAC_TMP_DIR/icon_32x32.png"      16 36 32
+composite_svgs_and_save_as_png source/bg_square.svg $TMP_DIR/blossom_tiny_light.svg "$MAC_TMP_DIR/icon_16x16.png"     16 40 16
+composite_svgs_and_save_as_png source/bg_square.svg $TMP_DIR/blossom_small_light.svg "$MAC_TMP_DIR/icon_16x16@2x.png" 16 36 32
+composite_svgs_and_save_as_png source/bg_square.svg $TMP_DIR/blossom_small_light.svg "$MAC_TMP_DIR/icon_32x32.png"    16 36 32
 composite_svgs_and_save_as_png source/bg_square.svg source/blossom_medium.svg "$MAC_TMP_DIR/icon_32x32@2x.png"  24 40 64
 composite_svgs_and_save_as_png source/bg_square.svg source/blossom_medium.svg "$MAC_TMP_DIR/icon_128x128.png"   24 40 128
 composite_svgs_and_save_as_png source/bg_square.svg source/blossom_large.svg "$MAC_TMP_DIR/icon_128x128@2x.png" 24 40 256
