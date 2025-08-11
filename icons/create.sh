@@ -223,6 +223,15 @@ echo "$ICON" > "$TMP_DIR/blossom_small_dark.svg"
 ICON=$(sed 's/path/path fill="#000000"/g' < source/blossom_small.svg)
 echo "$ICON" > "$TMP_DIR/blossom_small_black.svg"
 
+# ------------------------------- Logos for Kando Icon Theme ------------------------------------- #
+
+echo "Creating UI logo icon..."
+
+composite_svgs source/bg_circle.svg "$TMP_DIR/blossom_tiny_light.svg" $OUTPUT_DIR/logo-tiny.svg 0 44
+composite_svgs source/bg_circle.svg "$TMP_DIR/blossom_small_light.svg" $OUTPUT_DIR/logo-small.svg 0 40
+composite_svgs source/bg_circle.svg "source/blossom_medium.svg" $OUTPUT_DIR/logo-medium.svg 0 36
+composite_svgs source/bg_circle.svg "source/blossom_large.svg" $OUTPUT_DIR/logo-large.svg 0 32
+
 # ------------------------------------------ Tray Icons ------------------------------------------ #
 
 echo "Creating tray icons..."
